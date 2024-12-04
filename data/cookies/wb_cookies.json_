@@ -1,0 +1,202 @@
+[
+    {
+        "name": "wbx-seller-device-id",
+        "value": "supplier-portal__Windows-3bd4c1f8-b71b-4f1c-a192-37563f4ef2fe",
+        "domain": ".seller-auth.wildberries.ru",
+        "path": "/auth/",
+        "expires": 1764458022.621676,
+        "httpOnly": true,
+        "secure": true,
+        "sameSite": "None"
+    },
+    {
+        "name": "current_feature_version",
+        "value": "e65c09e3-c88b-4025-9d0c-278cb040db59",
+        "domain": "seller.wildberries.ru",
+        "path": "/",
+        "expires": -1,
+        "httpOnly": true,
+        "secure": true,
+        "sameSite": "None"
+    },
+    {
+        "name": "_wbauid",
+        "value": "8989104281732921993",
+        "domain": ".wildberries.ru",
+        "path": "/",
+        "expires": 1764457993,
+        "httpOnly": false,
+        "secure": false,
+        "sameSite": "Lax"
+    },
+    {
+        "name": "landing_version",
+        "value": "AE17F22B-9B18-4D00-B6B0-A11D21DA938D",
+        "domain": "seller.wildberries.ru",
+        "path": "/",
+        "expires": -1,
+        "httpOnly": true,
+        "secure": true,
+        "sameSite": "None"
+    },
+    {
+        "name": "external-locale",
+        "value": "ru",
+        "domain": ".wildberries.ru",
+        "path": "/",
+        "expires": 1767648105.752214,
+        "httpOnly": false,
+        "secure": true,
+        "sameSite": "Lax"
+    },
+    {
+        "name": "cfidsw-wb",
+        "value": "WzI5hu5YzgaVJZDwVsmJ34Eyc0S03JgDxyJNWfbXFm2Th1YDZfhES2Olcl58YyOk0kJeCdZ2kIaWzVKTZCQ57eyiPJV2JOsEF3qNuT030qszyJNIq+0XnF/h1XAskDy05m3PVBSP5u4sJTp/NtysW2qbdS8PC2EXMAIB",
+        "domain": ".seller-auth.wildberries.ru",
+        "path": "/",
+        "expires": 1764458022,
+        "httpOnly": false,
+        "secure": false,
+        "sameSite": "Lax"
+    },
+    {
+        "name": "wbx-validation-key",
+        "value": "10d69535-e965-4cb1-a1f9-53bdc0440b59",
+        "domain": ".wildberries.ru",
+        "path": "/",
+        "expires": 1735680101.077474,
+        "httpOnly": true,
+        "secure": true,
+        "sameSite": "Lax"
+    },
+    {
+        "name": "__zzatw-wb",
+        "value": "MDA0dC0cTHtmcDhhDHEWTT17CT4VHThHKHIzd2UvPWUeZEhaJjVRP0FaW1Q4NmdBEXUmCQg3LGBwVxlRExpceEdXeiwcEwhtJU8JDWJASWllbQwtUlFRS19/Dg4/aU5ZQ11wS3E6EmBWGB5CWgtMeFtLKRZHGzJhXkZpdRUKEBAZQ3N2Lyw7ISVjSF0gS15OCVkhFHtvWFc4DmFzc19vG3siXyoIJGM1Xz9EaVhTMCpYQXt1J3Z+KmUzPGwgYVBbIUNXTwgpGQ1pN2wXPHVlLwkxLGJ5MVIvE0tsP0caRFpbQDsyVghDQE1HFF9BWncyUlFRS2EQR0lrZU5TQixmG3EVTQgNND1aciIPWzklWAgSPwsmIBR5dCVRfw1dREVvbxt/Nl0cOWMRCxl+OmNdRkc3FSRU8Ibbhw==",
+        "domain": ".seller-auth.wildberries.ru",
+        "path": "/",
+        "expires": 1764458022,
+        "httpOnly": false,
+        "secure": false,
+        "sameSite": "Lax"
+    },
+    {
+        "name": "locale",
+        "value": "ru",
+        "domain": "seller.wildberries.ru",
+        "path": "/",
+        "expires": 1767648105.752084,
+        "httpOnly": false,
+        "secure": true,
+        "sameSite": "Lax"
+    },
+    {
+        "name": "x-supplier-id",
+        "value": "db28efff-f7a9-52f8-8342-f1a58f7d8ed3",
+        "domain": "seller.wildberries.ru",
+        "path": "/",
+        "expires": 1767648105.904586,
+        "httpOnly": false,
+        "secure": true,
+        "sameSite": "Lax"
+    },
+    {
+        "name": "x-supplier-id-external",
+        "value": "db28efff-f7a9-52f8-8342-f1a58f7d8ed3",
+        "domain": ".wildberries.ru",
+        "path": "/",
+        "expires": 1767648105.904858,
+        "httpOnly": false,
+        "secure": true,
+        "sameSite": "Lax"
+    },
+    {
+        "name": "WBTokenV3",
+        "value": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3MzI5MjIwMjMsInZlcnNpb24iOjIsInVzZXIiOiI2MjAxNTExNyIsInNoYXJkX2tleSI6IjE5IiwiY2xpZW50X2lkIjoic2VsbGVyLXBvcnRhbCIsInNlc3Npb25faWQiOiJjOTVmNmI5ZDMwZDg0MTQxODkxOGQ4MzQ0ZThhMzZmYiIsInVzZXJfcmVnaXN0cmF0aW9uX2R0IjoxNjk1MDUyMDcyLCJ2YWxpZGF0aW9uX2tleSI6IjdmMTVlZmU4MDA2ZGFlNWM2ZTBhODQ2Y2I1MjI0OGIyZWZhNTViYzI3ZDYxNjYzMTQzNzUwYWRiNzhjZjQzMzUifQ.N7Mo3whlQSfHrxUFE2WFOxD9mOWvjfhaoEYNjJ6Ey5Kg5TmwVQAwb24YOlBj4uut1Sq66IhKFekBKLEoNAQ2I9Wjte-Petmll747h6wIBWW2_FUYhgUNjirtHaagwCUI6tQJvPAAO0vCTjbhSRbl03nrOA6uEw1RKwZjuLo4PE5ZvqdwbajfUUJxKOA7Sn0FMC3HE1lkt1ELXKPppBjryWqOsl1I8zU3d6426TyvdOyaQFq_e4RKBNKEgF_dJ5BqF98vwn564hz4ydOMwWnEjpebShTD0h3lE4T00obyme-rhwD0kifAiKXjOy3OrbzobQ-sZkQ-z-p79rSldenwlQ",
+        "domain": "seller-communications.wildberries.ru",
+        "path": "/",
+        "expires": 1764458030.91678,
+        "httpOnly": true,
+        "secure": false,
+        "sameSite": "Lax"
+    },
+    {
+        "name": "WBTokenV3",
+        "value": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3MzI5MjIwMjMsInZlcnNpb24iOjIsInVzZXIiOiI2MjAxNTExNyIsInNoYXJkX2tleSI6IjE5IiwiY2xpZW50X2lkIjoic2VsbGVyLXBvcnRhbCIsInNlc3Npb25faWQiOiJjOTVmNmI5ZDMwZDg0MTQxODkxOGQ4MzQ0ZThhMzZmYiIsInVzZXJfcmVnaXN0cmF0aW9uX2R0IjoxNjk1MDUyMDcyLCJ2YWxpZGF0aW9uX2tleSI6IjdmMTVlZmU4MDA2ZGFlNWM2ZTBhODQ2Y2I1MjI0OGIyZWZhNTViYzI3ZDYxNjYzMTQzNzUwYWRiNzhjZjQzMzUifQ.N7Mo3whlQSfHrxUFE2WFOxD9mOWvjfhaoEYNjJ6Ey5Kg5TmwVQAwb24YOlBj4uut1Sq66IhKFekBKLEoNAQ2I9Wjte-Petmll747h6wIBWW2_FUYhgUNjirtHaagwCUI6tQJvPAAO0vCTjbhSRbl03nrOA6uEw1RKwZjuLo4PE5ZvqdwbajfUUJxKOA7Sn0FMC3HE1lkt1ELXKPppBjryWqOsl1I8zU3d6426TyvdOyaQFq_e4RKBNKEgF_dJ5BqF98vwn564hz4ydOMwWnEjpebShTD0h3lE4T00obyme-rhwD0kifAiKXjOy3OrbzobQ-sZkQ-z-p79rSldenwlQ",
+        "domain": "callcenter.wildberries.ru",
+        "path": "/",
+        "expires": 1764458031.075681,
+        "httpOnly": true,
+        "secure": false,
+        "sameSite": "Lax"
+    },
+    {
+        "name": "wbx-refresh",
+        "value": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3MzMwODgxMDEsInZlcnNpb24iOjMsInVzZXIiOiI2MjAxNTExNyIsInNoYXJkX2tleSI6IjE5IiwiY2xpZW50X2lkIjoic2VsbGVyLXBvcnRhbCIsInNlc3Npb25faWQiOiJjOTVmNmI5ZDMwZDg0MTQxODkxOGQ4MzQ0ZThhMzZmYiIsInVzZXJfcmVnaXN0cmF0aW9uX2R0IjoxNjk1MDUyMDcyfQ.iRSQJSgCDOp63NdQqeic4zoYRwjuAGeH3HHpuAJy8S4zXCP-KzGPfcODTZ8UqJspLRXhzH3TGhZd2R9P3p8AuM7I-zMYpAZyFutkipF5tleYntfIYKL57KcVeeKmpsRC166Q4-gtk6PxPWHBpU_B3-9F8lRXgGb3AdFS3j4Uw4cHeHQoQKJATCQjEFPeEUHL-GrcqC7GJpaJJXemuj_QoacYo5_b2ReGs-Zf6cF1O3KAzsSyRoZ01r-DYIPoUwh78QBQ4xGPV9nFopPTwjqzJrRypIBbJzVXPkPWpj4eoVHwRGQKkHKfp8nppQw93BvDw_pAwk76nQNWan4K-1ObZQ",
+        "domain": ".seller-auth.wildberries.ru",
+        "path": "/",
+        "expires": 1740864101.07734,
+        "httpOnly": true,
+        "secure": true,
+        "sameSite": "Lax"
+    },
+    {
+        "name": "WBTokenV3",
+        "value": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3MzMwODgxMDEsInZlcnNpb24iOjIsInVzZXIiOiI2MjAxNTExNyIsInNoYXJkX2tleSI6IjE5IiwiY2xpZW50X2lkIjoic2VsbGVyLXBvcnRhbCIsInNlc3Npb25faWQiOiJjOTVmNmI5ZDMwZDg0MTQxODkxOGQ4MzQ0ZThhMzZmYiIsInVzZXJfcmVnaXN0cmF0aW9uX2R0IjoxNjk1MDUyMDcyLCJ2YWxpZGF0aW9uX2tleSI6IjdmMTVlZmU4MDA2ZGFlNWM2ZTBhODQ2Y2I1MjI0OGIyZWZhNTViYzI3ZDYxNjYzMTQzNzUwYWRiNzhjZjQzMzUifQ.rPtx9drv6OCw4h8o6L-tTHrwSp3FQLsjKAtZx9pLrRavE5UTjBlFuhy6yYicZWc1IJq7rI2W_yuD1aRzcMpWKrpGxG2gGk9qbJparfWn4TjYs_t6GCMPUmoJBMjivselpsMEPD6V_m3GkjY777-HrKmanZ2f1x3TNkWZHtmP9FHS3XjoRSF0kKake6rieV0ajLUsOkyllHwWt9Dik2OKU3ctbFACam0265RLV651dYoNIbQo0JFG14fjboc9FS6AmFEHBGPSfy7803SBzvqi1XKyVcnteu-1_tzq93XT9p-B-f7SxOjXVtACEM9O51HpfTU19a90ZKbU9WQGNiyBQQ",
+        "domain": "seller.wildberries.ru",
+        "path": "/",
+        "expires": 1764624105.608385,
+        "httpOnly": true,
+        "secure": false,
+        "sameSite": "Lax"
+    },
+    {
+        "name": "__zzatw-wb",
+        "value": "MDA0dC0cTHtmcDhhDHEWTT17CT4VHThHKHIzd2UvPWUeZEhaJjVRP0FaW1Q4NmdBEXUmCQg3LGBwVxlRExpceEdXeiwcFHdzK1B/EGJGSmllbQwtUlFRS19/Dg4/aU5ZQ11wS3E6EmBWGB5CWgtMeFtLKRZHGzJhXkZpdRUKEBAZQ3N2Lyw7ISVjSF0gS15OCVkhFHtvWFc4DmFzc19vG3siXyoIJGM1Xz9EaVhTMCpYQXt1J3Z+KmUzPGwgYkdhJ0RVUgklGQ1pN2wXPHVlLwkxLGJ5MVIvE0tsP0caRFpbQDsyVghDQE1HFF9BWncyUlFRS2EQR0lrZU5TQixmG3EVTQgNND1aciIPWzklWAgSPwsmIBR6aytXCAtgRUFubxt/Nl0cOWMRCxl+OmNdRkc3FSR7dSYKCTU3YnAvTCB7SykWRxsyYV5GaXUVCzkNY3J3KzEmcWxOaEReIXldSgkoHRN0KSQIDBMZRHV1MF0+VxlRDxZhDhYYRRcje0I3Yhk4QhgvPV8/YngiD2lIYCJGVVUJJhkWCGsoS3FPLH12X30beylOIA0lVBMhP05y4WFktA==",
+        "domain": ".seller.wildberries.ru",
+        "path": "/",
+        "expires": 1764624105,
+        "httpOnly": false,
+        "secure": false,
+        "sameSite": "Lax"
+    },
+    {
+        "name": "__zzatw-wb",
+        "value": "MDA0dC0cTHtmcDhhDHEWTT17CT4VHThHKHIzd2UvPWUeZEhaJjVRP0FaW1Q4NmdBEXUmCQg3LGBwVxlRExpceEdXeiwcFHdzK1B/EGJGSmllbQwtUlFRS19/Dg4/aU5ZQ11wS3E6EmBWGB5CWgtMeFtLKRZHGzJhXkZpdRUKEBAZQ3N2Lyw7ISVjSF0gS15OCVkhFHtvWFc4DmFzc19vG3siXyoIJGM1Xz9EaVhTMCpYQXt1J3Z+KmUzPGwgYkdhJ0RVUgklGQ1pN2wXPHVlLwkxLGJ5MVIvE0tsP0caRFpbQDsyVghDQE1HFF9BWncyUlFRS2EQR0lrZU5TQixmG3EVTQgNND1aciIPWzklWAgSPwsmIBR6aytXCAtgRUFubxt/Nl0cOWMRCxl+OmNdRkc3FSR7dSYKCTU3YnAvTCB7SykWRxsyYV5GaXUVCzkNY3J3KzEmcWxOaEReIXldSgkoHRN0KSQIDBMZRHV1MF0+VxlRDxZhDhYYRRcje0I3Yhk4QhgvPV8/YngiD2lIYCJGVVUJJhkWCGsoS3FPLH12X30beylOIA0lVBMhP05y4WFktA==",
+        "domain": ".wildberries.ru",
+        "path": "/",
+        "expires": 1764624105,
+        "httpOnly": false,
+        "secure": false,
+        "sameSite": "Lax"
+    },
+    {
+        "name": "cfidsw-wb",
+        "value": "70UAxsVL64qC8cLKkvGT4028Rl762d3dbQb9sczN5sEHVMLDB42JlPDK1ISr5cu0mbmLZG1rLqoZATNmqdag2e3Or9gtlywK/AlLZER7ktuQylwK/04rLOxJ4DMuW0W6PHM4OFtKuCTOKqc2gSblZ+mLW30sBBBJ5ZP6juM=",
+        "domain": "seller-services.wildberries.ru",
+        "path": "/",
+        "expires": 1764624106.962869,
+        "httpOnly": false,
+        "secure": true,
+        "sameSite": "None"
+    },
+    {
+        "name": "cfidsw-wb",
+        "value": "70UAxsVL64qC8cLKkvGT4028Rl762d3dbQb9sczN5sEHVMLDB42JlPDK1ISr5cu0mbmLZG1rLqoZATNmqdag2e3Or9gtlywK/AlLZER7ktuQylwK/04rLOxJ4DMuW0W6PHM4OFtKuCTOKqc2gSblZ+mLW30sBBBJ5ZP6juM=",
+        "domain": ".seller.wildberries.ru",
+        "path": "/",
+        "expires": 1764624106,
+        "httpOnly": false,
+        "secure": false,
+        "sameSite": "Lax"
+    },
+    {
+        "name": "cfidsw-wb",
+        "value": "70UAxsVL64qC8cLKkvGT4028Rl762d3dbQb9sczN5sEHVMLDB42JlPDK1ISr5cu0mbmLZG1rLqoZATNmqdag2e3Or9gtlywK/AlLZER7ktuQylwK/04rLOxJ4DMuW0W6PHM4OFtKuCTOKqc2gSblZ+mLW30sBBBJ5ZP6juM=",
+        "domain": ".wildberries.ru",
+        "path": "/",
+        "expires": 1764624106,
+        "httpOnly": false,
+        "secure": false,
+        "sameSite": "Lax"
+    }
+]
