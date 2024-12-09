@@ -1,91 +1,15 @@
 from pathlib import Path
 
-# Пути для файлов
+# Пути
 BASE_DIR = Path(__file__).parent.parent
-DATA_DIR = BASE_DIR / "data"
+DATA_DIR = BASE_DIR / "users_data"
 COOKIES_DIR = DATA_DIR / "cookies"
 
-# Базовые настройки
-BASE_DIR = Path(__file__).parent.parent
-HEADLESS = False  # False для отладки
-SELLER_WB_URL = "https://seller.wildberries.ru/"
 
-# Пути для хранения данных
-COOKIES_DIR = BASE_DIR / "data" / "cookies"
-
-# Настройки браузера
-BROWSER_CONFIG = {"headless": HEADLESS, "args": ["--no-sandbox"]}
-
-# Таймауты и интервалы (все значения в секундах)
-SUPPLY_CHECK_INTERVAL = 12  # секунд между проверками
-PAGE_TIMEOUT = 0
-WAIT_DEBUG = 0.1  # секунды для отладки
-WAIT_AUTH = 3  # секунды для отладки
-MAX_CHECK_AUTH_ATTEMPTS = 5  # секунды между проверками авторизации
-WAIT_VALIDATE_SUPPLY_DATA = 30  # секунды для ожидания страницы с поставкой
-WAIT_VALIDATE_SUPPLY_DATA_INTERVAL = 15  # секунды между проверками данных поставки
-MAX_VALIDATE_SUPPLY_DATA_ATTEMPTS = 3  # секунды между проверками данных поставки
-WAIT_ANIMATION = 0.5  # секунды для ожидания анимаций
-WAIT_NETWORK = 30  # секунды для ожидания сети
-WAIT_SELECTOR = 30  # секунды для ожидания селекторов
-WAIT_SELECTOR_AUTH = 30  # секунды для ожидания селекторов
-AUTH_TIMEOUT = 60  # секунды на авторизацию
-CHECK_POPUPS_INTERVAL = 5  # секунды между попытками очистки попапов
-MAX_CLOSE_POPUP_ATTEMPTS = 5  # максимум попыток очистки попапов
-CHECK_DATE_INTERVAL = 12  # секунды между проверками даты
-WAIT_BOOK_DATE = 60  # секунды для ожидания результата бронирования
-
-SUPPLY_DATE_URL = "https://seller.wildberries.ru/supplies-management/all-supplies/supply-detail/uploaded-goods"
-
-COEFF_VALUES = {"FREE": "Бесплатно", "ANY": "Любой", "VALUES": [5, 10, 15, 20]}
+def get_user_cookies_dir(user_id: str) -> Path:
+    return COOKIES_DIR / user_id
 
 
-SUPPLIES = [
-    {
-        "preorder_id": "33011974",
-        "warehouse_name": "СЦ Астрахань",
-        "warehouse_id": "",
-        "target_date": "8 декабря",
-        "target_coeff_value": "Любой",
-    },
-    # {
-    #     "preorder_id": "328232311",
-    #     "warehouse_name": "Коледино",
-    #     "warehouse_id": "",
-    #     "target_date": "9 декабря",
-    #     "target_coeff_value": "10",
-    # },
-]
-
-# Добавим список известных попапов
-POPUPS = {
-    "cookies": {
-        "container": 'div[id="Portal-warning-cookies-modal"]',
-        "close": 'button:has(span:text("Принимаю"))',
-    },
-    # "help_center": {
-    #     "container": '[class^="Help-center-absolute-button"]',
-    #     "close": '[class^="Help-center-absolute-button__"]',
-    # },
-    # "quiz": {
-    #     "container": "#Portal-quiz-modal",
-    #     "close": '[data-testid="quiz-modal-close-button"]',
-    # },
-    # "tutorial_portal": {
-    #     "container": "#react-joyride-portal",
-    #     "close": '[data-testid="tutorial-skip-button"]',
-    # },
-    "tutorial_step": {
-        "container": 'div[id^="react-joyride"]',
-        "close": 'div[class^="Tooltip-hint-view__close-button"][data-action="close"][aria-label="Close"]',
-    },
-    # "tutorial_overlay": {
-    #     "container": ".react-joyride__overlay",
-    #     "close": '[data-testid="tutorial-skip-button"]',
-    # },
-}
-
-# Селекторы WB
 WB_SELECTORS = {
     "auth": {
         "authorized": "#Portal-header",  # Хедер портала (есть только у авторизованных)
@@ -105,6 +29,7 @@ WB_SELECTORS = {
             "coeff_value": "div[class^='Calendar-cell__amount-cost'] div[class^='Coefficient-table-cell'] div[class^='Coefficient-block__coefficient-text'] span[class*='Text--body-s']",
         },
         "select_button": 'div[class^="Custom-popup"] button:has-text("Выбрать")',
+        "date_is_disabled": "is-disabled",
         "book_button": 'div[class^="Calendar-plan-buttons"] button:has(span:text("Запланировать"))',
     },
     "booking": {
@@ -113,12 +38,168 @@ WB_SELECTORS = {
     },
 }
 
-# eyJhbGciOiJFUzI1NiIsImtpZCI6IjIwMjQxMTE4djEiLCJ0eXAiOiJKV1QifQ.eyJlbnQiOjEsImV4cCI6MTc0ODc4MjUzNywiaWQiOiIwMTkzN2ZiNy00NGY4LTdiNzgtODRkMC0yYjZiZjA4NGNhM2MiLCJpaWQiOjEyMDk1MjczLCJvaWQiOjMwODIyLCJzIjoxMDczNzQyODQ4LCJzaWQiOiJkYjI4ZWZmZi1mN2E5LTUyZjgtODM0Mi1mMWE1OGY3ZDhlZDMiLCJ0IjpmYWxzZSwidWlkIjoxMjA5NTI3M30.M_GLRh1qVa__X0oXuKHiIQfkQ01nnu3uLScuJZsfOwu8718J1NnltB2_-0KPEBqDY8RvQW2IGEeSIcEPJ_tE2Q
+POPUPS = {
+    "cookies": {
+        "container": 'div[id="Portal-warning-cookies-modal"]',
+        "close": 'div[id="Portal-warning-cookies-modal"] button:has(span:text("Принимаю"))',
+    },
+    # "help_center": {
+    #     "container": '[class^="Help-center-absolute-button"]',
+    #     "close": '[class^="Help-center-absolute-button__"]',
+    # },
+    "quiz": {
+        # "container": "",
+        "close": '#Portal-quiz-modal button:has(span:text("Отменить"))',
+    },
+    # "tutorial_portal": {
+    #     "container": "#react-joyride-portal",
+    #     "close": '[data-testid="tutorial-skip-button"]',
+    # },
+    "tutorial_step": {
+        "container": 'div[id^="react-joyride"]',
+        "close": 'div[class^="Tooltip-hint-view__close-button"][data-action="close"][aria-label="Close"]',
+    },
+    # "tutorial_overlay": {
+    #     "container": ".react-joyride__overlay",
+    #     "close": '[data-testid="tutorial-skip-button"]',
+    # },
+}
 
-# https://seller.wildberries.ru/supplies-management/new-supply/choose-date?warehouseId=&draftID=&transitWarehouseId=&preorderId=32932680
+# Системные настройки
+SYSTEM_CONFIG = {
+    "timeouts": {
+        "SUPPLY_CHECK_INTERVAL": 12,  # секунд между проверками
+        "PAGE_TIMEOUT": 0,
+        "WAIT_DEBUG": 0.1,  # секунды для отладки
+        "WAIT_AUTH": 3,  # секунды для отладки
+        "MAX_CHECK_AUTH_ATTEMPTS": 5,  # секунды между проверками авторизации
+        "WAIT_VALIDATE_SUPPLY_DATA": 30,  # секунды для ожидания страницы с поставкой
+        "WAIT_VALIDATE_SUPPLY_DATA_INTERVAL": 15,  # секунды между проверками данных поставки
+        "MAX_VALIDATE_SUPPLY_DATA_ATTEMPTS": 3,  # секунды между проверками данных поставки
+        "WAIT_ANIMATION": 0.5,  # секунды для ожидания анимаций
+        "WAIT_NETWORK": 30,  # секунды для ожидания сети
+        "WAIT_SELECTOR": 30,  # секунды для ожидания селекторов
+        "WAIT_SELECTOR_AUTH": 30,  # секунды для ожидания селекторов
+        "AUTH_TIMEOUT": 60,  # секунды на авторизацию
+        "CHECK_POPUPS_INTERVAL": 5,  # секунды между попытками очистки попапов
+        "MAX_CLOSE_POPUP_ATTEMPTS": 25,  # максимум попыток очистки попапов
+        "CHECK_DATE_INTERVAL": 12,  # секунды между проверками даты
+        "WAIT_BOOK_DATE": 60,
+        "COOKIES_TTL": 3600,  # секунды для ожидания результата бронирования
+    },
+    "browser": {"headless": False, "args": ["--no-sandbox"]},
+    "urls": {
+        "seller": "https://seller.wildberries.ru/",
+        "supply": "https://seller.wildberries.ru/supplies-management/all-supplies/supply-detail/uploaded-goods",
+    },
+    "selectors": WB_SELECTORS,
+    "popups": POPUPS,
+}
 
-# https://seller.wildberries.ru/supplies-management/new-supply/choose-date?preorderID=32816035
+# Константы для настроек бронирования
+BOOKING_MODES = {"SPECIFIC_DATES": "SPECIFIC_DATES", "ANY_DATE": "ANY_DATE"}
 
-# https://seller.wildberries.ru/supplies-management/new-supply/choose-date?warehouseId=&draftID=&transitWarehouseId=&preorderID=33009882
+BOOKING_PRIORITIES = {
+    "BY_LOWER_COEFF": "BY_LOWER_COEFF",
+    "BY_CLOSEST_DATE": "BY_CLOSEST_DATE",
+}
 
-# Возможные значения коэффициентов
+COEFF_VALUES = {
+    "COEFF_FREE": "COEFF_FREE",
+    "COEFF_ANY": "COEFF_ANY",
+    "COEFF_VALUE": [5, 10, 15, 20],
+}
+
+USER_TYPES = {"USER_FREE": "USER_FREE", "USER_PAID": "USER_PAID"}
+
+# Лимиты для разных типов пользователей
+USER_LIMITS = {
+    USER_TYPES["USER_FREE"]: {
+        "max_supplies": 3,  # Максимум 3 активные поставки
+        "features": {
+            "any_date": True,  # Нет доступа к режиму "Любая дата"
+            "any_coeff": True,  # Нет доступа к режиму "Любой коэффициент"
+        },
+    },
+    USER_TYPES["USER_PAID"]: {
+        "max_supplies": None,  # Без ограничений
+        "features": {
+            "any_date": True,  # Доступен режим "Любая дата"
+            "any_coeff": True,  # Доступен режим "Любой коэффициент"
+        },
+    },
+}
+
+# Тестовые поставки (потом заменим на данные из БД)
+USER_SUPPLIES = [
+    {
+        "user_id": "30822",
+        "supplies": [
+            {
+                "supply_id": "test_supply_3",
+                "user_type": USER_TYPES["USER_FREE"],
+                "preorder_id": "33263989",
+                "warehouse_name": "СЦ Пятигорск (Этока)",
+                "warehouse_id": "",
+                "booking_settings": {
+                    "mode": BOOKING_MODES["SPECIFIC_DATES"],
+                    "target_dates": [
+                        "17 декабря",
+                        "19 декабря",
+                        "18 декабря",
+                        "20 декабря",
+                    ],
+                    # "mode": BOOKING_MODES["ANY_DATE"],
+                    # "target_dates": None,
+                    "priority": BOOKING_PRIORITIES["BY_LOWER_COEFF"],
+                    # "target_coeff": COEFF_VALUES["COEFF_VALUE"][0],  # 5
+                    "target_coeff": COEFF_VALUES["COEFF_FREE"],
+                },
+                "status": {
+                    "active": True,
+                    "attempts_count": 0,
+                    "booked": False,
+                    "supply_id": None,
+                },
+            },
+            {
+                "supply_id": "test_supply_1",
+                "user_type": USER_TYPES["USER_FREE"],
+                "preorder_id": "33203923",
+                "warehouse_name": "СЦ Новосибирск Пасечная",
+                "warehouse_id": "",
+                "booking_settings": {
+                    "mode": BOOKING_MODES["SPECIFIC_DATES"],
+                    "target_dates": ["11 декабря", "30 декабря"],
+                    "priority": BOOKING_PRIORITIES["BY_LOWER_COEFF"],
+                    "target_coeff": COEFF_VALUES["COEFF_VALUE"][0],  # 5
+                },
+                "status": {
+                    "active": False,
+                    "attempts_count": 0,
+                    "booked": False,
+                    "supply_id": None,
+                },
+            },
+            {
+                "supply_id": "test_supply_2",
+                "preorder_id": "33262463",
+                "warehouse_name": "СЦ Архангельск",
+                "warehouse_id": "",
+                "booking_settings": {
+                    "mode": BOOKING_MODES["ANY_DATE"],
+                    "target_dates": None,
+                    "priority": None,
+                    "target_coeff": COEFF_VALUES["COEFF_VALUE"][0],  # 5
+                    # "target_coeff": COEFF_VALUES["COEFF_FREE"],  # "Любой"
+                },
+                "status": {
+                    "active": True,
+                    "attempts_count": 0,
+                    "booked": False,
+                    "supply_id": None,
+                },
+            },
+        ],
+    }
+]

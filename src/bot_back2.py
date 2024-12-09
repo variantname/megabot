@@ -9,6 +9,7 @@ from config import (
     SYSTEM_CONFIG,
     BOOKING_MODES,
     BOOKING_PRIORITIES,
+    COEFF_VALUES,
     USER_TYPES,
     USER_LIMITS,
     get_user_cookies_dir,
@@ -162,7 +163,7 @@ class MEGABOT:
             filtered_supplies = []
             for supply in user_supplies:
                 if supply["status"]["active"]:
-                    user_type = supply.get("user_type", USER_TYPES["USER_FREE"])
+                    user_type = supply.get("user_type", USER_TYPES["FREE"])
                     booking_mode = supply["booking_settings"]["mode"]
                     target_coeff = supply["booking_settings"]["target_coeff"]
 
@@ -178,7 +179,7 @@ class MEGABOT:
 
                     # Проверяем доступ к ANY коэффициенту
                     if (
-                        target_coeff == COEFF_VALUES["COEFF_ANY"]
+                        target_coeff == COEFF_VALUES["ANY"]
                         and not USER_LIMITS[user_type]["features"]["any_coeff"]
                     ):
                         logger.error(
@@ -190,7 +191,7 @@ class MEGABOT:
 
             # Проверяем лимит на количество поставок для FREE пользователей
             if (
-                user_type == USER_TYPES["USER_FREE"]
+                user_type == USER_TYPES["FREE"]
                 and len(filtered_supplies) > USER_LIMITS[user_type]["max_supplies"]
             ):
                 logger.warning(
@@ -422,8 +423,8 @@ class MEGABOT:
                     logger.info(f"Календарь открыт - {preorder_id}")
                     # Даем время на полную загрузку календаря
                     await asyncio.sleep(SYSTEM_CONFIG["timeouts"]["WAIT_ANIMATION"])
-
-                    return await self.get_target_dates(page, supply)
+                    asyncio.create_task(self.find_date_block(page, supply))
+                    return True
 
                 logger.error(
                     f"Попытка {attempt + 1}: Календарь не появился после клика - {preorder_id}"
@@ -442,185 +443,259 @@ class MEGABOT:
         )
         return False
 
-    async def get_target_dates(self, page: Page, supply: dict) -> bool:
+    async def find_date_block(self, page: Page, supply: dict) -> bool:
+        preorder_id = supply["preorder_id"]
+        try:
+            logger.info(f"Ищем подходящую дату - {preorder_id}")
+            await asyncio.sleep(SYSTEM_CONFIG["timeouts"]["WAIT_DEBUG"])
+
+            # Получаем список дат для поиска
+            target_dates = await self.get_target_dates(page, supply)
+            if not target_dates:
+                logger.error(f"Не найдены целевые даты для поиска - {preorder_id}")
+                return False
+
+            logger.info(f"Будем искать следующие даты: {target_dates}")
+
+            # Ищем подходящий блок
+            target_block = await self.process_target_dates(page, target_dates, supply)
+            if not target_block:
+                return False
+
+            # Запускаем выбор даты
+            asyncio.create_task(self.select_date(page, target_block, supply))
+            return True
+
+        except Exception as e:
+            logger.error(f"Ошибка при поиске даты - {preorder_id}: {str(e)}")
+            return False
+
+    async def get_target_dates(self, page: Page, supply: dict) -> List[str]:
+        """Получает список дат для поиска в календаре"""
         preorder_id = supply["preorder_id"]
         booking_settings = supply["booking_settings"]
+        target_dates = []
 
         try:
             logger.info(f"Получаем целевые даты для поставки {preorder_id}")
 
-            # Сначала всегда получаем все даты из календаря в правильном порядке
-            calendar_dates = []
-            date_cells = await page.query_selector_all(
-                SYSTEM_CONFIG["selectors"]["calendar"]["date_container"]
-            )
-
-            for cell in date_cells:
-                date_element = await cell.query_selector(
-                    SYSTEM_CONFIG["selectors"]["calendar"]["date_text"]
-                )
-                if date_element:
-                    date_text = await date_element.inner_text()
-                    # Убираем день недели из даты календаря
-                    clean_date = date_text.split(",")[0]
-                    calendar_dates.append(clean_date)
-
-            logger.info(f"Даты из календаря WB: {calendar_dates}")
-
             if booking_settings["mode"] == BOOKING_MODES["SPECIFIC_DATES"]:
-                # Фильтруем даты календаря, оставляя только те, что указаны в настройках
-                target_dates = [
-                    date
-                    for date in calendar_dates
-                    if date in booking_settings["target_dates"]
-                ]
-                logger.info(f"Отфильтрованные даты для {preorder_id}: {target_dates}")
-            else:  # ANY_DATE
-                # Используем все даты из календаря
-                target_dates = calendar_dates
+                # Для конкретных дат просто берем их из настроек
+                target_dates = booking_settings["target_dates"]
                 logger.info(
-                    f"Используем все даты из календаря для {preorder_id}: {target_dates}"
+                    f"Для {preorder_id} взяты конкретные даты из настроек: {target_dates}"
                 )
 
-            if not target_dates:
-                logger.error(f"Не найдены даты для обработки - {preorder_id}")
-                return False
+            else:  # ANY_DATE
+                # Собираем все непустые даты из календаря
+                date_cells = await page.query_selector_all(
+                    SYSTEM_CONFIG["selectors"]["calendar"]["date_container"]
+                )
 
-            # Передаем даты в process_target_dates
-            return await self.process_target_dates(page, target_dates, supply)
+                for cell in date_cells:
+                    date_element = await cell.query_selector(
+                        SYSTEM_CONFIG["selectors"]["calendar"]["date_text"]
+                    )
+                    if date_element:
+                        date_text = await date_element.inner_text()
+                        target_dates.append(date_text)
+
+                logger.info(
+                    f"Для {preorder_id} собраны все даты из календаря: {target_dates}"
+                )
+
+            return target_dates
 
         except Exception as e:
             logger.error(
                 f"Ошибка при получении целевых дат для {preorder_id}: {str(e)}"
             )
-            return False
+            return []
 
     async def process_target_dates(
         self, page: Page, target_dates: List[str], supply: dict
-    ) -> bool:
+    ) -> Optional[ElementHandle]:
+        """Обрабатывает список дат и возвращает подходящий блок календаря"""
         preorder_id = supply["preorder_id"]
         booking_settings = supply["booking_settings"]
         target_coeff = booking_settings["target_coeff"]
-
-        logger.info(
-            f"{preorder_id} - Режим: {booking_settings['mode']}, Приоритет: {booking_settings['priority']}"
-        )
 
         try:
             logger.info(f"Обрабатываем даты для {preorder_id}")
             suitable_blocks = []
 
-            # Проходим по датам в том порядке, как они идут в календаре
-            for target_date in target_dates:
-                logger.info(f"{preorder_id} - Найдена активная дата: {target_date}")
-
-                # Находим ячейку с датой
-                date_cell = await page.query_selector(
-                    f'{SYSTEM_CONFIG["selectors"]["calendar"]["cell"]}:has(span:text("{target_date}"))'
+            # Для каждой даты ищем её блок в календаре
+            for date in target_dates:
+                # Ищем блок с этой датой
+                date_blocks = await page.query_selector_all(
+                    SYSTEM_CONFIG["selectors"]["calendar"]["cell"]
                 )
 
-                if not date_cell:
-                    logger.warning(
-                        f"{preorder_id} - Ячейка для даты {target_date} не найдена"
+                for block in date_blocks:
+                    # Проверяем дату
+                    date_container = await block.query_selector(
+                        SYSTEM_CONFIG["selectors"]["calendar"]["date_container"]
                     )
-                    continue
-
-                # Сначала проверяем доступность даты
-                is_disabled = await date_cell.get_attribute("class")
-                if (
-                    is_disabled
-                    and SYSTEM_CONFIG["selectors"]["calendar"]["date_is_disabled"]
-                    in is_disabled
-                ):
-                    logger.warning(
-                        f"{preorder_id} - Дата {target_date} недоступна для бронирования"
-                    )
-                    continue
-
-                # Потом проверяем коэффициент
-                coeff_element = await date_cell.query_selector(
-                    SYSTEM_CONFIG["selectors"]["calendar"]["coeff"]["coeff_value"]
-                )
-
-                if not coeff_element:
-                    logger.warning(
-                        f"{preorder_id} - Коэффициент для даты {target_date} не найден"
-                    )
-                    continue
-
-                coeff_text = await coeff_element.inner_text()
-
-                # Проверяем коэффициент
-                if target_coeff == COEFF_VALUES["COEFF_FREE"]:
-                    # Для COEFF_FREE ищем "Бесплатно"
-                    if coeff_text.strip() != "Бесплатно":
-                        logger.warning(
-                            f"{preorder_id} - Дата ({target_date}) доступна, но коэффициент не бесплатный"
-                        )
-                        continue
-                    coeff = "Бесплатно"
-                else:
-                    # Для обычных коэффициентов
-                    coeff = int(coeff_text.replace("×", "").strip())
-                    if coeff > int(target_coeff):
-                        logger.warning(
-                            f"{preorder_id} - Дата ({target_date}) доступна, но коэффициент ({coeff}) больше требуемого ({target_coeff})"
-                        )
+                    if not date_container:
                         continue
 
-                logger.info(
-                    f"{preorder_id} - Найден подходящий слот: дата {target_date}, коэффициент {coeff}"
-                )
-                suitable_blocks.append(
-                    {"date": target_date, "cell": date_cell, "coeff": coeff}
-                )
+                    date_element = await date_container.query_selector(
+                        SYSTEM_CONFIG["selectors"]["calendar"]["date_text"]
+                    )
+                    if not date_element:
+                        continue
+
+                    current_date = await date_element.inner_text()
+                    if current_date != date:
+                        continue
+
+                    # Проверяем коэффициент
+                    coeff_element = await block.query_selector(
+                        SYSTEM_CONFIG["selectors"]["calendar"]["coeff"]["coeff_value"]
+                    )
+                    if not coeff_element:
+                        continue
+
+                    coeff_text = await coeff_element.inner_text()
+                    coeff = 0 if coeff_text == COEFF_VALUES["FREE"] else int(coeff_text)
+
+                    # Проверяем подходит ли коэффициент
+                    if target_coeff == COEFF_VALUES["FREE"] and coeff != 0:
+                        continue
+                    elif target_coeff != COEFF_VALUES["ANY"] and coeff > int(
+                        target_coeff
+                    ):
+                        continue
+
+                    # Если дошли до сюда - блок подходит
+                    suitable_blocks.append(
+                        {"block": block, "date": date, "coeff": coeff}
+                    )
 
             if not suitable_blocks:
-                logger.error(f"{preorder_id} - Не найдено подходящих дат")
-                return await self.close_calendar(page, supply)
+                logger.error(f"Не найдено подходящих дат для {preorder_id}")
+                return None
 
-            logger.info(f"Все подходящие даты для {preorder_id}:")
-            for block in suitable_blocks:
-                logger.info(
-                    f"{preorder_id} - Дата: {block['date']}, Коэффициент: {block['coeff']}"
-                )
-
-            # Сортировка только если нужен приоритет по коэффициенту
-            if booking_settings["priority"] == BOOKING_PRIORITIES["BY_LOWER_COEFF"]:
-                logger.info("Сортируем по коэффициенту")
-                sorted_blocks = sorted(suitable_blocks, key=lambda x: x["coeff"])
+            # Сортируем блоки
+            if booking_settings["mode"] == BOOKING_MODES["ANY_DATE"]:
+                # Для ANY_DATE сортируем по дате
+                sorted_blocks = sorted(suitable_blocks, key=lambda x: x["date"])
             else:
-                logger.info("Используем порядок дат из календаря WB")
-                sorted_blocks = suitable_blocks  # Оставляем порядок как есть
+                # Для SPECIFIC_DATES учитываем приоритет
+                if booking_settings["priority"] == BOOKING_PRIORITIES["BY_COEFF"]:
+                    sorted_blocks = sorted(
+                        suitable_blocks, key=lambda x: (x["coeff"], x["date"])
+                    )
+                else:
+                    sorted_blocks = sorted(suitable_blocks, key=lambda x: x["date"])
 
-            logger.info(f"Отсортированные даты для {preorder_id}:")
-            for block in sorted_blocks:
-                logger.info(
-                    f"{preorder_id} - Дата: {block['date']}, Коэффициент: {block['coeff']}"
-                )
-
-            best_block = sorted_blocks[0]
+            best_block = sorted_blocks[0]["block"]
             logger.info(
-                f"{preorder_id} - Выбран лучший вариант: дата ({best_block['date']}), коэффициент = {best_block['coeff']}"
+                f"Найден подходящий блок для даты {sorted_blocks[0]['date']} с коэффициентом {sorted_blocks[0]['coeff']}"
             )
 
-            logger.info(
-                f"{preorder_id} - Запускаем бронирование: дата ({best_block['date']}), коэффициент = {best_block['coeff']}"
-            )
-
-            # Запускаем бронирование
-            # return await self.select_date(
-            #     page, best_block["cell"], best_block["date"], supply
-            # )
+            return best_block
 
         except Exception as e:
             logger.error(f"Ошибка при обработке дат для {preorder_id}: {str(e)}")
+            return None
+
+    async def validate_date_block(
+        self, page: Page, target_date_block, supply: dict
+    ) -> bool:
+        logger.info(
+            f"Проверяем доступность даты для поставки {supply['preorder_id']}..."
+        )
+        await asyncio.sleep(SYSTEM_CONFIG["timeouts"]["WAIT_DEBUG"])
+
+        try:
+            # Получаем класс родительского элемента
+            cell_class = await target_date_block.get_attribute("class")
+
+            if "is-disabled" in cell_class:
+                logger.error(f"Выбранная дата недоступна - {supply['preorder_id']}")
+                asyncio.create_task(self.close_calendar(page, supply))
+                return False
+
+            logger.info(f"Дата доступна - {supply['preorder_id']}")
+            asyncio.create_task(self.validate_coeff(page, target_date_block, supply))
+            return True
+
+        except Exception as e:
+            logger.error(
+                f"Ошибка при проверке доступности даты - {supply['preorder_id']}: {str(e)}"
+            )
+            return False
+
+    async def validate_coeff(self, page: Page, target_date_block, supply: dict) -> bool:
+        preorder_id = supply["preorder_id"]
+        booking_settings = supply["booking_settings"]
+        target_coeff = booking_settings["target_coeff"]
+
+        logger.info(f"Проверяем коэффициент для {preorder_id}...")
+        await asyncio.sleep(SYSTEM_CONFIG["timeouts"]["WAIT_DEBUG"])
+
+        try:
+            # Ищем значение коэффициента
+            coeff_value_span = await target_date_block.wait_for_selector(
+                SYSTEM_CONFIG["selectors"]["calendar"]["coeff"]["coeff_value"],
+                timeout=SYSTEM_CONFIG["timeouts"]["WAIT_SELECTOR"] * 1000,
+                state="visible",
+            )
+
+            if not coeff_value_span:
+                logger.error(f"Не найдено значение коэффициента для {preorder_id}")
+                return False
+
+            # Получаем текст коэффициента
+            coeff_text = await coeff_value_span.inner_text()
+
+            # Преобразуем коэффициент
+            if coeff_text == COEFF_VALUES["FREE"]:
+                real_coeff = 0
+            else:
+                try:
+                    real_coeff = int(coeff_text)
+                except ValueError:
+                    logger.error(
+                        f"{preorder_id}: Неожиданное значение коэффициента: {coeff_text}"
+                    )
+                    return False
+
+            # Проверяем коэффициент в зависимости от настроек
+            if target_coeff == COEFF_VALUES["FREE"] and real_coeff == 0:
+                logger.info(f"Найден бесплатный слот - {preorder_id}")
+                asyncio.create_task(self.select_date(page, target_date_block, supply))
+                return True
+
+            elif target_coeff == COEFF_VALUES["ANY"]:
+                logger.info(f"{preorder_id}: Принят любой коэффициент ({real_coeff})")
+                asyncio.create_task(self.select_date(page, target_date_block, supply))
+                return True
+
+            elif real_coeff <= int(target_coeff):
+                logger.info(
+                    f"{preorder_id}: Коэффициент подходит: {real_coeff} <= {target_coeff}"
+                )
+                asyncio.create_task(self.select_date(page, target_date_block, supply))
+                return True
+
+            else:
+                logger.error(
+                    f"{preorder_id}: Текущий коэффициент {real_coeff} больше целевого {target_coeff}"
+                )
+                asyncio.create_task(self.close_calendar(page, supply))
+                return False
+
+        except Exception as e:
+            logger.error(f"{preorder_id}: Ошибка при проверке коэффициента: {str(e)}")
             return False
 
     async def close_calendar(self, page: Page, supply: dict) -> bool:
         preorder_id = supply["preorder_id"]
-        logger.info(f"{preorder_id} - Закрываем календарь")
+        logger.info(f"Закрываем календарь для поставки {preorder_id}...")
         await asyncio.sleep(SYSTEM_CONFIG["timeouts"]["WAIT_DEBUG"])
+
         try:
             # Ждем кнопку закрытия
             close_button = await page.wait_for_selector(
@@ -635,7 +710,7 @@ class MEGABOT:
 
             # Кликаем по кнопке
             await close_button.click()
-            logger.info(f"{preorder_id} - Календарь закрыт")
+            logger.info("Календарь закрыт")
 
             # Запускаем повторное открытие календаря через интервал
             await asyncio.sleep(SYSTEM_CONFIG["timeouts"]["CHECK_DATE_INTERVAL"])
@@ -655,7 +730,7 @@ class MEGABOT:
             else "ближайшая"
         )
 
-        logger.info(f"Выбираем дату ({target_date}) для поставки {preorder_id}")
+        logger.info(f"Выбираем дату {target_date} для поставки {preorder_id}...")
         await asyncio.sleep(SYSTEM_CONFIG["timeouts"]["WAIT_DEBUG"])
 
         try:
