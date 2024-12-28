@@ -1,3 +1,6 @@
+https://mantine.dev/dates/date-picker/#multiple-dates
+https://shahabyazdi.github.io/react-multi-date-picker/
+
 # Список случаев для уведомлений
 
 WARNING | **main**:create_supply:196 - Превышен лимит активных поставок для пользователя

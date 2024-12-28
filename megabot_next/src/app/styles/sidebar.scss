@@ -1,0 +1,134 @@
+.logo-wrapper {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	padding: var(--p-3);
+}
+
+.sidebar-wrapper {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: var(--sidebar-width);
+	height: 100vh;
+	background-color: var(--color-dark-1);
+}
+
+.sidebar {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	height: 100%;
+}
+
+.account-wrapper {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	padding: var(--p-3);
+}
+
+.hello-human {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	padding: var(--p-1-5) 0;
+
+	@media (orientation: portrait) {
+		font-size: 20px;
+	}
+
+	.emoji {
+		font-size: 2.5vw;
+	}
+
+	.human-name {
+		font-family: 'Fira Sans', sans-serif;
+		font-weight: 500;
+		font-size: 1.15vw;
+		line-height: 1.2;
+	}
+}
+
+.main-menu-wrapper {
+	display: flex;
+}
+
+.main-menu {
+	width: 100%;
+}
+
+.main-menu .item {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	padding: var(--p-1-5) var(--p-3);
+	border-radius: 0 var(--p-1-5) var(--p-1-5) 0;
+	position: relative;
+	transition: var(--transition-all);
+
+	&::before {
+		content: '';
+		position: absolute;
+		right: 0;
+		top: calc(var(--p-2-5) * -1);
+		width: var(--p-2-5);
+		height: var(--p-2-5);
+		background-color: transparent;
+		border-bottom-right-radius: var(--p-1-5);
+		box-shadow: calc(var(--p-1-5)) calc(var(--p-1-5)) 0 transparent;
+		transition: var(--transition-all);
+	}
+
+	&::after {
+		content: '';
+		position: absolute;
+		right: 0;
+		bottom: calc(var(--p-2-5) * -1);
+		width: var(--p-2-5);
+		height: var(--p-2-5);
+		background-color: transparent;
+		border-top-right-radius: var(--p-1-5);
+		box-shadow: calc(var(--p-1-5)) calc(var(--p-1-5) * -1) 0 transparent;
+		transition: var(--transition-all);
+	}
+
+	// &:hover,
+	&.active {
+		background-color: var(--color-black);
+
+		&::before {
+			box-shadow: calc(var(--p-1-5)) calc(var(--p-1-5)) 0 var(--color-black);
+		}
+
+		&::after {
+			box-shadow: calc(var(--p-1-5)) calc(var(--p-1-5) * -1) 0
+				var(--color-black);
+		}
+	}
+
+	.active-label {
+		position: absolute;
+		right: var(--p-1-5);
+		color: var(--color-orange);
+		font-size: 1.75vw;
+		opacity: 0;
+		transition: var(--transition-all);
+	}
+
+	&.active .active-label {
+		opacity: 1;
+	}
+}
+
+.emoji-label {
+	color: var(--color-white);
+	font-size: 1.1vw;
+	line-height: 1.2;
+
+	.item:hover &,
+	.item.active & {
+		color: var(--color-orange);
+		transition: var(--transition-all);
+	}
+}

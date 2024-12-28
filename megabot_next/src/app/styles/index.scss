@@ -1,0 +1,102 @@
+@import '@mantine/dates/styles.css';
+@import 'sidebar.scss';
+@import 'elements.scss';
+
+:root {
+	--card-width: 400px;
+	--navbar-height: 10vh;
+	--sidebar-width: 25vw;
+
+	--p-1: 1vw;
+	--p-2: 2vw;
+	--p-3: 3vw;
+	--p-4: 4vw;
+	--p-5: 5vw;
+	--p-0-5: 0.5vw;
+	--p-0-75: 0.75vw;
+	--p-1-5: 1.5vw;
+	--p-2-5: 2.5vw;
+	--p-3-5: 3.5vw;
+	--p-4-5: 4.5vw;
+	--p-5-5: 5.5vw;
+
+	--color-red: #ff5515;
+	--color-orange: #ff9e28;
+	// --color-green: #59aa59;
+	--color-green: #538e53;
+	--color-blue: #bf9dff;
+	--color-white: #fefefe;
+	--color-black: #212121;
+	--color-dark-1: rgba(0, 0, 0, 0.15);
+	--color-dark-2: rgba(0, 0, 0, 0.3);
+	--color-dark-3: rgba(0, 0, 0, 0.5);
+	--color-dark-4: rgba(0, 0, 0, 0.75);
+	--color-dark-5: rgba(0, 0, 0, 0.9);
+
+	--btn-hover-shadow: 0 0 1vw;
+	--input-focus-shadow: 0 0 0.75vw;
+
+	// transitions
+	--transition-all: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+
+	@media (orientation: portrait) {
+		--card-width: 90vw;
+		--navbar-height: 10vh;
+	}
+}
+
+* {
+	box-sizing: border-box;
+	padding: 0;
+	margin: 0;
+}
+
+a {
+	text-decoration: none;
+}
+
+body {
+	max-width: 100vw;
+	overflow-x: hidden;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	font-family: 'Roboto', sans-serif;
+	font-weight: 400;
+	min-height: 100vh;
+	line-height: 1.2;
+	background-color: #212121;
+	color: #fefefe;
+}
+
+main {
+	margin-left: var(--sidebar-width);
+}
+
+.sticker {
+	position: sticky;
+	top: 0;
+	z-index: 10;
+	width: 100%;
+	// background-color: var(--color-black);
+	backdrop-filter: blur(2vw);
+	padding: var(--p-2-5) var(--p-5);
+
+	&::after {
+		content: '';
+		position: absolute;
+		bottom: calc(var(--p-3) * -1);
+		left: 0;
+		width: 100%;
+		height: var(--p-3);
+		background: linear-gradient(
+			to bottom,
+			rgba(33, 33, 33, 1) 0%,
+			rgba(33, 33, 33, 0.5) 50%,
+			rgba(33, 33, 33, 0) 100%
+		);
+	}
+}
+
+.content-container {
+	padding: var(--p-3) var(--p-5);
+}

@@ -1,6 +1,7 @@
 desc
-logs/
-data/
+megabot_py/logs/
+megabot_py/tests/
+megabot_py/users_data/
 .vscode/
 read.md
 requirements.txt

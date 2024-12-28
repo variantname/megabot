@@ -1,0 +1,18 @@
+2024-12-13 21:23:09.173 | INFO     | __main__:main:886 - СТАРТ РАБОТЫ БОТА
+2024-12-13 21:23:09.175 | INFO     | __main__:main:893 - Инициализация бота для пользователя 30822
+2024-12-13 21:23:09.176 | INFO     | __main__:init_browser:45 - Начинаем запуск браузера...
+2024-12-13 21:23:09.709 | INFO     | __main__:init_browser:49 - Playwright запущен
+2024-12-13 21:23:10.732 | INFO     | __main__:init_browser:55 - Браузер запущен
+2024-12-13 21:23:11.089 | INFO     | __main__:init_browser:63 - Страница создана
+2024-12-13 21:23:11.109 | INFO     | __main__:load_cookies:144 - Cookies загружены из C:\Disc\Projects\variant.name\megabot\megabot_py\users_data\cookies\30822\wb_cookies.json
+2024-12-13 21:23:12.604 | INFO     | __main__:init_browser:74 - Перешли на сайт WB
+2024-12-13 21:23:12.604 | INFO     | __main__:check_auth_status:321 - Проверяем статус авторизации...
+2024-12-13 21:23:15.738 | INFO     | __main__:check_auth_status:335 - Авторизация успешна
+2024-12-13 21:23:45.762 | ERROR    | __main__:validate_user_id:400 - Ошибка проверки ID поставщика: Page.wait_for_selector: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator("selector_для_id_поставщика") to be visible
+
+2024-12-13 21:23:45.764 | ERROR    | __main__:check_auth_status:345 - Ошибка валидации ID поставщика
+2024-12-13 21:23:45.765 | ERROR    | __main__:init_browser:79 - Ошибка авторизации
+2024-12-13 21:23:45.767 | ERROR    | __main__:main:901 - ❌ Ошибка инициализации браузера для 30822
+2024-12-13 21:24:35.304 | INFO     | __main__:main:913 - ЗАВЕРШЕНИЕ РАБОТЫ БОТА

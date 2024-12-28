@@ -1,0 +1,248 @@
+.emoji.o3 {
+	text-shadow: var(--color-white) 3px 0 0,
+		var(--color-white) 2.90674px 0.742212px 0,
+		var(--color-white) 2.63275px 1.43828px 0,
+		var(--color-white) 2.19507px 2.04492px 0,
+		var(--color-white) 1.62091px 2.52441px 0,
+		var(--color-white) 0.945968px 2.84696px 0,
+		var(--color-white) 0.212212px 2.99249px 0,
+		var(--color-white) -0.534738px 2.95196px 0,
+		var(--color-white) -1.24844px 2.72789px 0,
+		var(--color-white) -1.88452px 2.33422px 0,
+		var(--color-white) -2.40343px 1.79542px 0,
+		var(--color-white) -2.77291px 1.14498px 0,
+		var(--color-white) -2.96998px 0.42336px 0,
+		var(--color-white) -2.98239px -0.324586px 0,
+		var(--color-white) -2.80937px -1.05235px 0,
+		var(--color-white) -2.46168px -1.71469px 0,
+		var(--color-white) -1.96093px -2.27041px 0,
+		var(--color-white) -1.33826px -2.68497px 0,
+		var(--color-white) -0.632387px -2.93259px 0,
+		var(--color-white) 0.112807px -2.99788px 0,
+		var(--color-white) 0.850988px -2.87678px 0,
+		var(--color-white) 1.53626px -2.57681px 0,
+		var(--color-white) 2.12601px -2.11662px 0,
+		var(--color-white) 2.58358px -1.52484px 0,
+		var(--color-white) 2.88051px -0.838245px 0,
+		var(--color-white) 2.99835px -0.0995377px 0;
+}
+
+.emoji.o2 {
+	text-shadow: var(--color-white) 2px 0 0,
+		var(--color-white) 1.93783px 0.494808px 0,
+		var(--color-white) 1.75517px 0.95885px 0,
+		var(--color-white) 1.46338px 1.36328px 0,
+		var(--color-white) 1.08061px 1.68294px 0,
+		var(--color-white) 0.630645px 1.89797px 0,
+		var(--color-white) 0.141475px 1.99499px 0,
+		var(--color-white) -0.356492px 1.96797px 0,
+		var(--color-white) -0.832295px 1.8186px 0,
+		var(--color-white) -1.25635px 1.55615px 0,
+		var(--color-white) -1.60229px 1.19695px 0,
+		var(--color-white) -1.84861px 0.76332px 0,
+		var(--color-white) -1.97999px 0.28224px 0,
+		var(--color-white) -1.98826px -0.216391px 0,
+		var(--color-white) -1.87292px -0.701565px 0,
+		var(--color-white) -1.64112px -1.14313px 0,
+		var(--color-white) -1.30729px -1.51361px 0,
+		var(--color-white) -0.892175px -1.78998px 0,
+		var(--color-white) -0.421592px -1.95506px 0,
+		var(--color-white) 0.0752045px -1.99859px 0,
+		var(--color-white) 0.567325px -1.91785px 0,
+		var(--color-white) 1.02417px -1.71787px 0,
+		var(--color-white) 1.41734px -1.41108px 0,
+		var(--color-white) 1.72239px -1.01656px 0,
+		var(--color-white) 1.92034px -0.55883px 0,
+		var(--color-white) 1.9989px -0.0663585px 0;
+}
+
+.emoji.o1 {
+	text-shadow: var(--color-white) 1px 0 0, var(--color-white) 1px 1px 0,
+		var(--color-white) 0 1px 0, var(--color-white) -1px 1px 0,
+		var(--color-white) -1px 0 0, var(--color-white) -1px -1px 0,
+		var(--color-white) 0 -1px 0, var(--color-white) 1px -1px 0;
+}
+
+.emoji.c {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: var(--p-2-5);
+	height: var(--p-2-5);
+	font-size: 1.35vw;
+	margin-right: var(--p-1);
+	border-radius: var(--p-3);
+	background-color: var(--color-white);
+	outline: 1px solid;
+	outline-offset: 2px;
+	outline-color: var(--color-white);
+
+	text-shadow: var(--color-dark-1) 1px 0 0, var(--color-dark-1) 1px 1px 0,
+		var(--color-dark-1) 0 1px 0, var(--color-dark-1) -1px 1px 0,
+		var(--color-dark-1) -1px 0 0, var(--color-dark-1) -1px -1px 0,
+		var(--color-dark-1) 0 -1px 0, var(--color-dark-1) 1px -1px 0;
+}
+
+h1 {
+	font-family: 'Fira Sans', sans-serif;
+	font-weight: 700;
+	font-size: 1.75vw;
+	letter-spacing: 0.01em;
+	color: var(--color-orange);
+}
+
+.btn {
+	width: calc(100% - 6px);
+	min-height: 2.5vw;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	border-radius: 20vw;
+	cursor: pointer;
+	outline: 2px solid;
+	outline-offset: 2px;
+	border: none;
+	transition: 0.25s ease-in-out;
+	margin: 3px 0;
+
+	&:hover {
+		outline-color: transparent;
+	}
+}
+
+.btn-label {
+	color: var(--color-black);
+	font-family: 'Fira Sans', sans-serif;
+	font-weight: 500;
+	font-size: 1vw;
+	line-height: 1.2;
+}
+
+.btn-o {
+	background-color: var(--color-orange);
+	outline-color: var(--color-orange);
+
+	&:hover {
+		box-shadow: var(--btn-hover-shadow) var(--color-orange);
+	}
+}
+
+.btn-g {
+	background-color: var(--color-green);
+	outline-color: var(--color-green);
+
+	&:hover {
+		box-shadow: var(--btn-hover-shadow) var(--color-green);
+	}
+}
+
+.btn-r {
+	background-color: var(--color-red);
+	outline-color: var(--color-red);
+
+	&:hover {
+		box-shadow: var(--btn-hover-shadow) var(--color-red);
+	}
+}
+
+.btn-w {
+	background-color: var(--color-white);
+	outline-color: var(--color-white);
+
+	&:hover {
+		box-shadow: var(--btn-hover-shadow) var(--color-white);
+	}
+}
+
+.btn-spacer {
+	height: var(--p-1);
+}
+
+input {
+	width: 100%;
+	border: none;
+	border-radius: 0.75vw;
+	padding: var(--p-0-75) var(--p-1) calc(var(--p-0-75) - 2px) var(--p-1);
+	font-size: 1vw;
+	line-height: 1;
+	font-weight: 400;
+	outline: 2px solid;
+	outline-offset: 2px;
+	transition: 0.25s ease-in-out;
+	margin: 3px 0;
+
+	.card-o &,
+	.card-r &,
+	.card-g & {
+		background-color: var(--color-black);
+		color: var(--color-white);
+		outline-color: var(--color-black);
+	}
+
+	&:focus {
+		outline-color: transparent;
+		box-shadow: var(--input-focus-shadow) var(--color-dark-3);
+	}
+}
+
+.label {
+	display: block;
+	font-size: 1vw;
+	font-weight: 500;
+	padding: 0 0 0.25vw 0;
+}
+
+.input-legend {
+	display: block;
+	font-size: 0.75vw;
+	font-weight: 500;
+	color: var(--color-white);
+	padding: 0.25vw 0 0 var(--p-1);
+}
+
+.cards {
+	display: grid;
+	gap: var(--p-2-5);
+	grid-template-columns: repeat(3, 1fr);
+}
+
+.card {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	aspect-ratio: 1;
+	background-color: var(--color-dark-1);
+	padding: var(--p-2-5);
+	border-radius: var(--p-1-5);
+	outline: 1px solid;
+	outline-offset: 2px;
+	outline-color: var(--color-dark-1);
+
+	form {
+		display: flex;
+		flex-direction: column;
+		justify-content: space-between;
+		height: 100%;
+	}
+}
+
+.card-g {
+	background-color: var(--color-green);
+	outline-color: var(--color-green);
+}
+
+.seller-info {
+	display: flex;
+	flex-direction: column;
+	gap: var(--p-1);
+}
+
+.seller-name {
+	font-size: 1.25vw;
+	font-weight: 700;
+}
+
+.seller-inn {
+	font-size: 1vw;
+	font-weight: 500;
+}
