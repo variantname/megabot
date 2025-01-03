@@ -14,11 +14,16 @@ interface UserContextType {
 	hasInn: boolean;
 	loading: boolean;
 	refreshUserData: () => Promise<void>;
+	userAccess: {
+		canAccessSupplies: boolean;
+		canAccessDashboard: boolean;
+		canAccessSettings: boolean;
+		canAccessTariff: boolean;
+	};
 }
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
 
-// Компонент с данными пользователя
 function UserDataProvider({ children }: { children: ReactNode }) {
 	const { data: session } = useSession();
 	const [hasInn, setHasInn] = useState(false);
@@ -28,29 +33,48 @@ function UserDataProvider({ children }: { children: ReactNode }) {
 		try {
 			const response = await fetch('/api/user/data');
 			const data = await response.json();
-			data.user?.sellers?.some((seller: Seller) => seller.seller_id) ||
+			const hasSellerWithInn =
+				data.user?.sellers?.some((seller: Seller) => seller.seller_id) ||
 				false;
+			setHasInn(hasSellerWithInn);
 		} catch (error) {
 			console.error('Error fetching user data:', error);
+			setHasInn(false);
 		} finally {
 			setLoading(false);
 		}
 	};
 
+	const userAccess = {
+		canAccessSupplies: hasInn,
+		canAccessDashboard: hasInn,
+		canAccessSettings: hasInn,
+		canAccessTariff: true,
+	};
+
+	// Загружаем данные только при изменении сессии
 	useEffect(() => {
 		if (session) {
 			refreshUserData();
+		} else {
+			setHasInn(false);
+			setLoading(false);
 		}
 	}, [session]);
 
 	return (
-		<UserContext.Provider value={{ hasInn, loading, refreshUserData }}>
+		<UserContext.Provider
+			value={{
+				hasInn,
+				loading,
+				refreshUserData,
+				userAccess,
+			}}>
 			{children}
 		</UserContext.Provider>
 	);
 }
 
-// Главный провайдер, объединяющий сессию и данные
 export function UserProvider({ children }: { children: ReactNode }) {
 	return (
 		<SessionProvider>

@@ -30,16 +30,8 @@ const userSchema = new mongoose.Schema(
 					type: String,
 					required: true,
 				},
-				created_at: {
-					type: Date,
-					default: Date.now,
-				},
 			},
 		],
-		created_at: {
-			type: Date,
-			default: Date.now,
-		},
 		active: {
 			type: Boolean,
 			default: false,
@@ -82,9 +74,7 @@ const userSchema = new mongoose.Schema(
 			{
 				amount: Number,
 				date: { type: Date },
-				status: {
-					type: String,
-				},
+				status: String,
 				payment_method: String,
 				transaction_id: String,
 			},

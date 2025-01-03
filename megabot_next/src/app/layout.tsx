@@ -1,12 +1,9 @@
 import type { Metadata } from 'next';
 import localFont from 'next/font/local';
-import { DatesProvider } from '@mantine/dates';
-import dayjs from 'dayjs';
-// import 'dayjs/locale/ru';
 import './styles/index.scss';
-import { UserProvider } from '@/lib/UserProvider';
+import { AppProvider } from '@/lib/AppProvider';
+import Navbar from '@/components/layout/Navbar';
 import Sidebar from '@/components/layout/Sidebar';
-import { MenuProvider } from '@/lib/MenuProvider';
 
 const FontFiraSans = localFont({
 	src: [
@@ -59,14 +56,11 @@ export default function RootLayout({
 		<html lang='ru' data-theme='megabot'>
 			<body
 				className={`${FontFiraSans.variable} ${FontRoboto.variable} font-sans`}>
-				<UserProvider>
-					<MenuProvider>
-						<DatesProvider settings={{ locale: 'ru' }}>
-							<Sidebar />
-							<main>{children}</main>
-						</DatesProvider>
-					</MenuProvider>
-				</UserProvider>
+				<AppProvider>
+					<Navbar />
+					<Sidebar />
+					<main>{children}</main>
+				</AppProvider>
 			</body>
 		</html>
 	);

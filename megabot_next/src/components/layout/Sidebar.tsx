@@ -8,18 +8,10 @@ import { useUser } from '@/lib/UserProvider';
 import { useEffect, useState } from 'react';
 import { useMenu } from '@/lib/MenuProvider';
 
-const menuItems = [
-	{ path: '/user/dashboard', icon: '📊', label: 'Статистика' },
-	{ path: '/user/supplies', icon: '📦', label: 'Поставки' },
-	{ path: '/user/sellers', icon: '🛒', label: 'Твои магазины' },
-	{ path: '/user/settings', icon: '⚙️', label: 'Настройки' },
-	{ path: '/user/tariff', icon: '💰', label: 'Твой тариф' },
-];
-
 export default function Sidebar() {
 	const pathname = usePathname();
 	const { data: session, status } = useSession();
-	const { hasInn, loading: userLoading } = useUser();
+	const { hasInn, loading: userLoading, userAccess } = useUser();
 	const [isSigningOut, setIsSigningOut] = useState(false);
 
 	// Не показываем сайдбар если:
@@ -49,6 +41,39 @@ export default function Sidebar() {
 
 	const { closeMenu } = useMenu();
 
+	const menuItems = [
+		{
+			path: '/user/dashboard',
+			icon: '📊',
+			label: 'Статистика',
+			show: userAccess.canAccessDashboard,
+		},
+		{
+			path: '/user/supplies',
+			icon: '📦',
+			label: 'Поставки',
+			show: userAccess.canAccessSupplies,
+		},
+		{
+			path: '/user/sellers',
+			icon: '🛒',
+			label: 'Твои магазины',
+			show: true, // всегда показываем
+		},
+		{
+			path: '/user/settings',
+			icon: '⚙️',
+			label: 'Настройки',
+			show: userAccess.canAccessSettings,
+		},
+		{
+			path: '/user/tariff',
+			icon: '💰',
+			label: 'Твой тариф',
+			show: userAccess.canAccessTariff,
+		},
+	];
+
 	// Всегда рендерим div, но с разным содержимым
 	return (
 		<div className='sidebar-wrapper'>
@@ -57,24 +82,21 @@ export default function Sidebar() {
 					<div className='logo-wrapper'>MEGABOT</div>
 					<div className='main-menu-wrapper'>
 						<div className='main-menu'>
-							{(!hasInn
-								? menuItems
-								: menuItems.filter(
-										(item) => item.path === '/user/sellers'
-								  )
-							).map((item) => (
-								<Link
-									key={item.path}
-									href={item.path}
-									onClick={closeMenu}
-									className={`item ${
-										pathname === item.path ? 'active' : ''
-									}`}>
-									<span className='emoji c'>{item.icon}</span>
-									<span className='emoji-label'>{item.label}</span>
-									<span className='active-label'>→</span>
-								</Link>
-							))}
+							{menuItems
+								.filter((item) => item.show)
+								.map((item) => (
+									<Link
+										key={item.path}
+										href={item.path}
+										onClick={closeMenu}
+										className={`thing ${
+											pathname === item.path ? 'active' : ''
+										}`}>
+										<span className='emoji c'>{item.icon}</span>
+										<span className='emoji-label'>{item.label}</span>
+										<span className='active-label'>→</span>
+									</Link>
+								))}
 						</div>
 					</div>
 
