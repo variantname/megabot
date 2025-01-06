@@ -2,22 +2,22 @@ import { useState } from 'react';
 import { Seller } from '@/types/types';
 import Input from '@/components/forms/Input';
 import InnInput from '@/components/forms/InnInput';
-import { useToast } from '@/lib/ToastProvider';
 
 interface SellerFormProps {
 	initialData?: Seller;
+	existingSellers: Seller[];
 	onSuccess: (seller: Seller) => void;
-	existingSellers?: Seller[];
-	onError?: () => void;
+	onError: (error: string) => void;
+	apiEndpoint: string;
 }
 
 export default function SellerForm({
 	initialData,
+	existingSellers,
 	onSuccess,
-	existingSellers = [],
 	onError,
+	apiEndpoint,
 }: SellerFormProps) {
-	const { showError, showSuccess } = useToast();
 	const [seller, setSeller] = useState<Seller>(
 		initialData || {
 			seller_id: '',
@@ -86,42 +86,38 @@ export default function SellerForm({
 
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
-
-		// Валидация
-		const validation = validateSeller(seller);
-		if (!validation.isValid && validation.error) {
-			showError(validation.error);
-			return;
-		}
-
 		setLoading(true);
 
 		try {
-			// Если это редактирование, удаляем старую версию
-			const filteredSellers = existingSellers.filter(
-				(s) => s.seller_id !== initialData?.seller_id
-			);
+			const validation = validateSeller(seller);
 
-			// Добавляем обновленную версию
-			const updatedSellers = [...filteredSellers, seller];
+			if (!validation.isValid) {
+				onError(validation.error || 'Ошибка валидации');
+				return;
+			}
 
-			// Отправляем запрос на сервер
-			const response = await fetch('/api/user/update', {
-				method: 'POST',
+			const method = initialData ? 'PUT' : 'POST';
+			const url = initialData
+				? `${apiEndpoint}?id=${initialData.seller_id}`
+				: apiEndpoint;
+
+			const response = await fetch(url, {
+				method,
 				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify({ sellers: updatedSellers }),
+				body: JSON.stringify(seller),
 			});
 
 			if (!response.ok) {
-				throw new Error('Ошибка сохранения данных');
+				const data = await response.json();
+				throw new Error(data.error || 'Ошибка при сохранении');
 			}
 
-			// Обновляем UI через колбэк
-			onSuccess(seller);
-			showSuccess('Магазин успешно сохранён');
+			const data = await response.json();
+			onSuccess(data.seller);
 		} catch (err) {
-			onError?.();
-			showError(err instanceof Error ? err.message : 'Неизвестная ошибка');
+			const errorMessage =
+				err instanceof Error ? err.message : 'Ошибка при сохранении';
+			onError(errorMessage);
 		} finally {
 			setLoading(false);
 		}
@@ -130,6 +126,7 @@ export default function SellerForm({
 	return (
 		<form onSubmit={handleSubmit} noValidate>
 			<Input
+				id='seller_name'
 				name='seller_name'
 				value={seller.seller_name}
 				onChange={(e) =>
@@ -147,6 +144,7 @@ export default function SellerForm({
 
 			<div>
 				<InnInput
+					id='seller_id'
 					name='seller_id'
 					value={seller.seller_id}
 					onChange={(value) =>

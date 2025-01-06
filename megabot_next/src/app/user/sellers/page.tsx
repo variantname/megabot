@@ -10,38 +10,17 @@ import SellerForm from '@/components/forms/SellerForm';
 import Thing from '@/components/layout/Thing';
 import Link from 'next/link';
 import { useToast } from '@/lib/ToastProvider';
+import LoadingPage from '@/components/layout/LoadingPage';
 
 export default function SellersPage() {
-	const { data: session } = useSession();
+	const { sellers, dataLoading, refreshSellers } = useUser();
 	const { showSuccess, showError } = useToast();
-	const { refreshUserData } = useUser();
-
-	const [sellers, setSellers] = useState<Seller[]>([]);
 	const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
 	const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 	const [editingSeller, setEditingSeller] = useState<Seller | null>(null);
 	const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 	const [sellerToDelete, setSellerToDelete] = useState<Seller | null>(null);
-	const [previousSellers, setPreviousSellers] = useState<Seller[]>([]);
 	const [deleteLoading, setDeleteLoading] = useState(false);
-
-	useEffect(() => {
-		const fetchUserData = async () => {
-			try {
-				const response = await fetch('/api/user/data');
-				const data = await response.json();
-				if (data.user?.sellers) {
-					setSellers(data.user.sellers);
-				}
-			} catch (error) {
-				console.error('Error fetching user data:', error);
-			}
-		};
-
-		if (session) {
-			fetchUserData();
-		}
-	}, [session]);
 
 	// Управление модальными окнами
 	const handleOpenCreateModal = () => {
@@ -64,33 +43,33 @@ export default function SellersPage() {
 		setDeleteLoading(true);
 
 		try {
-			setPreviousSellers(sellers);
-			const updatedSellers = sellers.filter(
-				(s) => s.seller_id !== sellerToDelete.seller_id
+			const response = await fetch(
+				`/api/seller?id=${sellerToDelete.seller_id}`,
+				{
+					method: 'DELETE',
+				}
 			);
-			setSellers(updatedSellers);
-
-			const response = await fetch('/api/user/update', {
-				method: 'POST',
-				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify({ sellers: updatedSellers }),
-			});
 
 			if (!response.ok) {
 				throw new Error('Ошибка при удалении магазина');
 			}
 
-			await refreshUserData();
+			await refreshSellers();
 			showSuccess('Магазин успешно удален');
 		} catch (err) {
-			setSellers(previousSellers);
 			showError(
 				err instanceof Error ? err.message : 'Ошибка при удалении магазина'
 			);
 		} finally {
 			setDeleteLoading(false);
+			setIsDeleteModalOpen(false);
 		}
 	};
+
+	// Показываем LoadingPage пока идет загрузка данных
+	if (dataLoading) {
+		return <LoadingPage />;
+	}
 
 	return (
 		<>
@@ -134,20 +113,19 @@ export default function SellersPage() {
 								просто кликай сюда.
 							</Link>
 						</Thing>
+						<div className='cards'>
+							{sellers.map((seller) => (
+								<SellerCard
+									key={seller.seller_id}
+									name={seller.seller_name}
+									inn={seller.seller_id}
+									onEdit={() => handleOpenEditModal(seller)}
+									onDelete={() => handleDeleteClick(seller)}
+								/>
+							))}
+						</div>
 					</>
 				)}
-
-				<div className='cards'>
-					{sellers.map((seller) => (
-						<SellerCard
-							key={seller.seller_id}
-							name={seller.seller_name}
-							inn={seller.seller_id}
-							onEdit={() => handleOpenEditModal(seller)}
-							onDelete={() => handleDeleteClick(seller)}
-						/>
-					))}
-				</div>
 			</div>
 
 			{/* Модальное окно создания */}
@@ -159,12 +137,13 @@ export default function SellersPage() {
 				{({ handleClose }) => (
 					<SellerForm
 						existingSellers={sellers}
-						onSuccess={async (newSeller) => {
-							setSellers((prev) => [...prev, newSeller]);
-							await refreshUserData();
+						onSuccess={async () => {
+							await refreshSellers();
 							handleClose();
+							showSuccess('Магазин успешно добавлен');
 						}}
-						onError={() => setSellers(previousSellers)}
+						onError={showError}
+						apiEndpoint='/api/seller'
 					/>
 				)}
 			</Modal>
@@ -180,18 +159,13 @@ export default function SellersPage() {
 						<SellerForm
 							initialData={editingSeller}
 							existingSellers={sellers}
-							onSuccess={async (updatedSeller) => {
-								setSellers((prev) =>
-									prev.map((s) =>
-										s.seller_id === editingSeller.seller_id
-											? updatedSeller
-											: s
-									)
-								);
-								await refreshUserData();
+							onSuccess={async () => {
+								await refreshSellers();
 								handleClose();
+								showSuccess('Магазин успешно обновлен');
 							}}
-							onError={() => setSellers(previousSellers)}
+							onError={showError}
+							apiEndpoint='/api/seller'
 						/>
 					)
 				}

@@ -2,10 +2,11 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { signIn } from 'next-auth/react';
+import { signIn, useSession } from 'next-auth/react';
 import Link from 'next/link';
 
 export default function RegisterPage() {
+	const { data: session, status } = useSession();
 	const router = useRouter();
 	const [error, setError] = useState('');
 	const [loading, setLoading] = useState(false);
@@ -76,85 +77,87 @@ export default function RegisterPage() {
 		}
 	};
 
-	return (
-		<div className='content-container'>
-			<div className='flex flex-col items-center justify-center'>
-				<div className='flex justify-center'>
-					<h2 className='card-hello'>
-						<div className='hello-emoji'>❤️</div>
-						<div className='hello-human'>
-							Здравствуй, <br />
-							прекрасный Человек
+	if (status === 'unauthenticated') {
+		return (
+			<div className='content-container'>
+				<div className='flex flex-col items-center justify-center'>
+					<div className='flex justify-center'>
+						<h2 className='card-hello'>
+							<div className='hello-emoji'>❤️</div>
+							<div className='hello-human'>
+								Здравствуй, <br />
+								прекрасный Человек
+							</div>
+						</h2>
+					</div>
+
+					<div className='card bg-base-200 shadow-xl card-login'>
+						<div className='card-body'>
+							{error && (
+								<div className='alert alert-error mb-4'>{error}</div>
+							)}
+
+							<form onSubmit={handleSubmit}>
+								<div className='form-control w-full'>
+									<label className='label'>
+										<span className='label-text'>Email</span>
+									</label>
+									<input
+										name='email'
+										type='email'
+										placeholder='your@email.com'
+										className='input input-bordered w-full'
+										required
+									/>
+								</div>
+
+								<div className='form-control w-full my-3'>
+									<label className='label'>
+										<span className='label-text'>Пароль</span>
+									</label>
+									<input
+										name='password'
+										type='password'
+										placeholder='••••••••'
+										className='input input-bordered w-full'
+										required
+									/>
+								</div>
+
+								<div className='form-control w-full my-3'>
+									<label className='label'>
+										<span className='label-text'>
+											Подтвердите пароль
+										</span>
+									</label>
+									<input
+										name='confirmPassword'
+										type='password'
+										placeholder='••••••••'
+										className='input input-bordered w-full'
+										required
+									/>
+								</div>
+
+								<button
+									className='btn btn-primary w-full mt-6'
+									disabled={loading}>
+									{loading ? 'Регистрация...' : 'Зарегистрироваться'}
+								</button>
+
+								<div className='text-center'>
+									<div className='text-lg my-3'>Уже есть аккаунт?</div>
+									<Link
+										href='/login'
+										className='btn btn-secondary w-full'>
+										Войти
+									</Link>
+								</div>
+							</form>
 						</div>
-					</h2>
-				</div>
-
-				<div className='card bg-base-200 shadow-xl card-login'>
-					<div className='card-body'>
-						{error && (
-							<div className='alert alert-error mb-4'>{error}</div>
-						)}
-
-						<form onSubmit={handleSubmit}>
-							<div className='form-control w-full'>
-								<label className='label'>
-									<span className='label-text'>Email</span>
-								</label>
-								<input
-									name='email'
-									type='email'
-									placeholder='your@email.com'
-									className='input input-bordered w-full'
-									required
-								/>
-							</div>
-
-							<div className='form-control w-full my-3'>
-								<label className='label'>
-									<span className='label-text'>Пароль</span>
-								</label>
-								<input
-									name='password'
-									type='password'
-									placeholder='••••••••'
-									className='input input-bordered w-full'
-									required
-								/>
-							</div>
-
-							<div className='form-control w-full my-3'>
-								<label className='label'>
-									<span className='label-text'>
-										Подтвердите пароль
-									</span>
-								</label>
-								<input
-									name='confirmPassword'
-									type='password'
-									placeholder='••••••••'
-									className='input input-bordered w-full'
-									required
-								/>
-							</div>
-
-							<button
-								className='btn btn-primary w-full mt-6'
-								disabled={loading}>
-								{loading ? 'Регистрация...' : 'Зарегистрироваться'}
-							</button>
-
-							<div className='text-center'>
-								<div className='text-lg my-3'>Уже есть аккаунт?</div>
-								<Link
-									href='/login'
-									className='btn btn-secondary w-full'>
-									Войти
-								</Link>
-							</div>
-						</form>
 					</div>
 				</div>
 			</div>
-		</div>
-	);
+		);
+	}
 }

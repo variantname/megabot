@@ -1,26 +1,16 @@
 'use client';
 
 import { useSession } from 'next-auth/react';
-import { useUser } from '@/lib/UserProvider'; // Обновленный импорт
 import Link from 'next/link';
 
 export default function Home() {
 	const { data: session } = useSession();
-	const { hasInn } = useUser();
 
 	const getCtaButton = () => {
 		if (!session) {
 			return (
 				<Link href='/login' className='btn btn-primary btn-cta'>
 					Поймать заветный слот
-				</Link>
-			);
-		}
-
-		if (!hasInn) {
-			return (
-				<Link href='/user/inn' className='btn btn-primary btn-cta'>
-					Завершить настройку
 				</Link>
 			);
 		}

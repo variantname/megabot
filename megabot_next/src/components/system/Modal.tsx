@@ -60,7 +60,6 @@ export default function Modal({
 
 	return createPortal(
 		<>
-			<div className='modal-overlay' />
 			<div
 				className={`modal-content card ${className}`}
 				role='dialog'

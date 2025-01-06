@@ -15,14 +15,15 @@
 	--font-size-4: 1vw;
 	--font-size-5: 0.85vw;
 
+	--p-0-25: 0.25vw;
+	--p-0-5: 0.5vw;
+	--p-0-75: 0.75vw;
 	--p-1: 1vw;
 	--p-2: 2vw;
 	--p-3: 3vw;
 	--p-4: 4vw;
 	--p-5: 5vw;
 	--p-10: 10vw;
-	--p-0-5: 0.5vw;
-	--p-0-75: 0.75vw;
 	--p-1-5: 1.5vw;
 	--p-2-5: 2.5vw;
 	--p-3-5: 3.5vw;
@@ -35,12 +36,14 @@
 	--color-blue: #bf9dff;
 	--color-white: #ececec;
 	--color-black: #212121;
-	--color-black-trans: rgba(33, 33, 33, 0.85);
 	--color-darker-1: rgba(0, 0, 0, 0.15);
 	--color-darker-2: rgba(0, 0, 0, 0.3);
 	--color-darker-3: rgba(0, 0, 0, 0.5);
 	--color-darker-4: rgba(0, 0, 0, 0.75);
 	--color-darker-5: rgba(0, 0, 0, 0.9);
+	--color-orange-trans: rgba(255, 158, 40, 0.5);
+
+	--color-black-trans: rgba(33, 33, 33, 0.85);
 
 	--color-trans-dark-1: rgba(33, 33, 33, 0.15);
 
@@ -53,6 +56,8 @@
 	--toast-shadow: 0 0 3vw rgba(0, 0, 0, 1);
 
 	// transitions
+	--transition-005: all 0.05s cubic-bezier(0.4, 0, 0.2, 1);
+	--transition-015: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
 	--transition-025: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 	--transition-05: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 	--transition-075: all 0.75s cubic-bezier(0.4, 0, 0.2, 1);
@@ -68,13 +73,14 @@
 		--font-size-4: 4vw;
 		--font-size-5: 3.5vw;
 
+		--p-0-25: 0.5vw;
+		--p-0-5: 0.5vw;
+		--p-0-75: 1.5vw;
 		--p-1: 5vw;
 		--p-2: 4vw;
 		--p-3: 6vw;
 		--p-4: 8vw;
 		--p-5: 10vw;
-		--p-0-5: 1vw;
-		--p-0-75: 1.5vw;
 		--p-1-5: 3vw;
 		--p-2-5: 5vw;
 		--p-3-5: 7vw;
@@ -118,6 +124,40 @@ body {
 	color: #fefefe;
 }
 
+body.modal-show,
+body.select-show,
+body.menu-active {
+	overflow: hidden;
+	padding-left: var(--scrollbar-width);
+}
+
+.body-overlay {
+	position: fixed;
+	top: 0;
+	left: -1000%;
+	width: 100%;
+	height: 100%;
+	background-color: var(--color-darker-3);
+	backdrop-filter: blur(var(--blur-power-1));
+	opacity: 0;
+	transition: opacity 0.5s ease, left 0s 0.5s;
+
+	&.overlay-modal {
+		z-index: 1000;
+	}
+
+	&.overlay-select {
+		z-index: 10;
+	}
+}
+
+.modal-show .overlay-modal,
+.select-show .overlay-select {
+	transition: opacity 0.5s ease, left 0s 0s;
+	left: 0;
+	opacity: 1;
+}
+
 main {
 	width: calc(100vw - var(--sidebar-width));
 	margin-left: var(--sidebar-width);
@@ -136,9 +176,9 @@ main {
 	top: 0;
 	left: 0;
 	right: 0;
-	z-index: 20;
+	z-index: 10;
 	height: var(--navbar-height);
-	padding: 0 var(--p-3);
+	padding: 0 6vw;
 	background: linear-gradient(
 		to bottom,
 		rgba(33, 33, 33, 0) 0%,
@@ -182,8 +222,13 @@ main {
 
 		label {
 			position: relative;
-			width: var(--p-5);
-			height: var(--p-5);
+			width: 5vw;
+			height: 5vw;
+
+			@media (orientation: portrait) {
+				width: 10vw;
+				height: 10vw;
+			}
 		}
 
 		.menu-button-icon {
@@ -234,19 +279,19 @@ main {
 	);
 
 	backdrop-filter: blur(var(--blur-power-2));
-	padding: var(--p-2-5) var(--p-5) var(--p-0-5) var(--p-5);
+	padding: 2.5vw 5vw 0.5vw 5vw;
 
 	@media (orientation: portrait) {
-		padding: var(--p-2-5) var(--p-3) var(--p-0-5) var(--p-3);
+		padding: 5vw 6vw 4px 6vw;
 	}
 
 	&::after {
 		content: '';
 		position: absolute;
-		bottom: calc(var(--p-3) * -1);
+		bottom: -6vw;
 		left: 0;
 		width: 100%;
-		height: var(--p-3);
+		height: 6vw;
 		background: linear-gradient(
 			to bottom,
 			rgba(33, 33, 33, 1) 0%,
@@ -255,8 +300,8 @@ main {
 		);
 
 		@media (orientation: portrait) {
-			bottom: calc(var(--p-5) * -1);
-			height: var(--p-5);
+			bottom: -10vw;
+			height: 10vw;
 		}
 	}
 
@@ -271,10 +316,10 @@ main {
 }
 
 .content-container {
-	padding: var(--p-3) var(--p-5);
+	padding: 3vw 5vw;
 	margin-top: var(--navbar-height);
 
 	@media (orientation: portrait) {
-		padding: var(--p-3) var(--p-3) 30vw var(--p-3);
+		padding: 6vw 6vw 30vw 6vw;
 	}
 }

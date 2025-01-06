@@ -11,7 +11,7 @@ import { useMenu } from '@/lib/MenuProvider';
 export default function Sidebar() {
 	const pathname = usePathname();
 	const { data: session, status } = useSession();
-	const { hasInn, loading: userLoading, userAccess } = useUser();
+	const { loading: userLoading, userAccess } = useUser();
 	const [isSigningOut, setIsSigningOut] = useState(false);
 
 	// Не показываем сайдбар если:

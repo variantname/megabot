@@ -5,6 +5,53 @@ if (mongoose.models.User) {
 	delete mongoose.models.User;
 }
 
+// Схема поставки
+const supplySchema = new mongoose.Schema(
+	{
+		task_id: {
+			type: String,
+			required: true,
+		},
+		preorder_id: {
+			type: String,
+			required: true,
+		},
+		warehouse_name: String,
+		warehouse_id: String,
+		booking_settings: {
+			mode: {
+				type: String,
+				default: null,
+			},
+			target_dates: [String],
+			priority: {
+				type: String,
+				default: null,
+			},
+			target_coeff: String,
+		},
+		status: {
+			active: {
+				type: Boolean,
+				default: false,
+			},
+			attempts_count: {
+				type: Number,
+				default: 0,
+			},
+			booked: {
+				type: Boolean,
+				default: false,
+			},
+			supply_id: {
+				type: String,
+				default: null,
+			},
+		},
+	},
+	{ timestamps: true }
+);
+
 const userSchema = new mongoose.Schema(
 	{
 		email: {
@@ -30,6 +77,7 @@ const userSchema = new mongoose.Schema(
 					type: String,
 					required: true,
 				},
+				supplies: [supplySchema],
 			},
 		],
 		active: {
@@ -46,7 +94,6 @@ const userSchema = new mongoose.Schema(
 		last_login: {
 			type: Date,
 		},
-		// Новые поля для уведомлений
 		telegram_id: {
 			type: String,
 		},
@@ -69,7 +116,6 @@ const userSchema = new mongoose.Schema(
 				user_agent: String,
 			},
 		],
-		// История платежей
 		payment_history: [
 			{
 				amount: Number,
@@ -79,7 +125,6 @@ const userSchema = new mongoose.Schema(
 				transaction_id: String,
 			},
 		],
-		supplies: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Supply' }],
 	},
 	{
 		timestamps: true,
@@ -88,6 +133,9 @@ const userSchema = new mongoose.Schema(
 		collection: 'users',
 	}
 );
+
+userSchema.index({ 'sellers.seller_id': 1 });
+userSchema.index({ 'sellers.supplies._id': 1 });
 
 userSchema.pre('save', function (next) {
 	console.log('Pre-save hook. Document:', this.toObject());

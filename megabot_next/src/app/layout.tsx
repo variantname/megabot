@@ -59,7 +59,11 @@ export default function RootLayout({
 				<AppProvider>
 					<Navbar />
 					<Sidebar />
-					<main>{children}</main>
+					<main>
+						<div className='body-overlay overlay-select' />
+						{children}
+					</main>
+					<div className='body-overlay overlay-modal' />
 				</AppProvider>
 			</body>
 		</html>

@@ -20,6 +20,8 @@ export default function Navbar() {
 						type='checkbox'
 						checked={isMenuOpen}
 						onChange={toggleMenu}
+						name='menu-button'
+						id='menu-button'
 					/>
 
 					<svg

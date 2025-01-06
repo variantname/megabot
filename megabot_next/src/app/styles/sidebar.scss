@@ -13,9 +13,13 @@
 		background-color: var(--color-black-trans);
 		height: calc(100vh - var(--navbar-height));
 		top: calc(var(--navbar-height) + 0px);
-		padding: var(--p-3);
+		padding: 3vw;
 		backdrop-filter: blur(var(--blur-power-2));
 		filter: blur(var(--blur-power-1));
+
+		@media (orientation: portrait) {
+			padding: 6vw;
+		}
 
 		.menu-active & {
 			left: 0;
@@ -28,7 +32,7 @@
 	display: flex;
 	flex-direction: row;
 	align-items: center;
-	padding: var(--p-3);
+	padding: 3vw;
 
 	@media (orientation: portrait) {
 		display: none;
@@ -46,14 +50,18 @@
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-	padding: var(--p-3);
+	padding: 3vw;
+
+	@media (orientation: portrait) {
+		padding: 6vw;
+	}
 }
 
 .hello-human {
 	display: flex;
 	flex-direction: row;
 	align-items: center;
-	padding: var(--p-1-5) 0;
+	padding: 1.5vw 0;
 
 	@media (orientation: portrait) {
 		padding: 0;
@@ -64,7 +72,7 @@
 
 		@media (orientation: portrait) {
 			font-size: 10vw;
-			padding-right: var(--p-0-5);
+			padding-right: 0.5vw;
 		}
 	}
 
@@ -93,12 +101,12 @@
 		content: '';
 		position: absolute;
 		right: 0;
-		top: calc(var(--p-2-5) * -1);
-		width: var(--p-2-5);
-		height: var(--p-2-5);
+		top: -2.5vw;
+		width: 2.5vw;
+		height: 2.5vw;
 		background-color: transparent;
-		border-bottom-right-radius: var(--p-1-5);
-		box-shadow: calc(var(--p-1-5)) calc(var(--p-1-5)) 0 transparent;
+		border-bottom-right-radius: 1.5vw;
+		box-shadow: 1.5vw 1.5vw 0 transparent;
 		transition: var(--transition-025);
 
 		@media (orientation: portrait) {

@@ -1,29 +1,14 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { signIn, useSession } from 'next-auth/react';
-import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { useUser } from '@/lib/UserProvider';
 import LoadingPage from '@/components/layout/LoadingPage';
 
 export default function LoginPage() {
 	const { data: session, status } = useSession();
-	const { hasInn, loading: userLoading } = useUser();
-	const router = useRouter();
 	const [error, setError] = useState('');
 	const [loading, setLoading] = useState(false);
-
-	// Проверяем статус авторизации и ИНН
-	useEffect(() => {
-		if (status === 'authenticated' && !userLoading) {
-			if (hasInn) {
-				router.push('/user/supplies');
-			} else {
-				router.push('/user/sellers');
-			}
-		}
-	}, [status, hasInn, userLoading, router]);
 
 	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
@@ -50,7 +35,6 @@ export default function LoginPage() {
 						setError('Произошла ошибка при входе');
 				}
 			}
-			// Убираем редирект отсюда, он будет происходить через useEffect
 		} catch (err) {
 			console.error('Login error:', err);
 			setError('Произошла ошибка при подключении к серверу');
@@ -58,15 +42,6 @@ export default function LoginPage() {
 			setLoading(false);
 		}
 	};
-
-	// Показываем загрузку при любых проверках статуса
-	if (
-		status === 'loading' ||
-		loading ||
-		(status === 'authenticated' && userLoading)
-	) {
-		return <LoadingPage />;
-	}
 
 	// Показываем форму только если точно не авторизован
 	if (status === 'unauthenticated') {
@@ -146,7 +121,4 @@ export default function LoginPage() {
 			</div>
 		);
 	}
-
-	// В остальных случаях показываем загрузку
-	return <LoadingPage />;
 }

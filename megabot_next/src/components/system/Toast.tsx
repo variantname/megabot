@@ -13,7 +13,7 @@ export default function Toast({
 	type,
 	message,
 	onClose,
-	duration = 3000,
+	duration = 5000,
 }: ToastProps) {
 	const [isHiding, setIsHiding] = useState(false);
 	const [isVisible, setIsVisible] = useState(false);
